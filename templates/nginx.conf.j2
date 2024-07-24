@@ -14,6 +14,7 @@ http {
     access_log /dev/stdout main;
     sendfile on;
     keepalive_timeout 65;
+
     {% for user in users %}
     server {
         listen 80;
@@ -22,6 +23,8 @@ http {
             return 204;
         }
     }
+    {% endfor %}
+
     server {
         listen 80 default_server;
         server_name _;
@@ -29,5 +32,11 @@ http {
             return 444;
         }
     }
-    {% endfor %}
+    server {
+        listen 80;
+        server_name {{ hostname_base }};
+        location / {
+            return 444;
+        }
+    }
 }

@@ -19,7 +19,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && apt -y install nginx
 # Supervisor
 RUN DEBIAN_FRONTEND=noninteractive apt update && apt -y install supervisor
 RUN mkdir -p /var/log/supervisor
-ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ADD configs/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Main
 RUN DEBIAN_FRONTEND=noninteractive apt update && apt -y install python3-pip
@@ -27,5 +27,6 @@ RUN mkdir -p /etc/app
 ADD requirements.txt /usr/bin/app/
 RUN python3 -m pip install -r /usr/bin/app/requirements.txt
 ADD templates /usr/bin/app/templates
-ADD template_configs.py /usr/bin/app/template_configs.py
-CMD python3 /usr/bin/app/template_configs.py && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+ADD scripts/template_configs.py /usr/bin/app/template_configs.py
+ADD scripts/entrypoint.sh /usr/bin/app/entrypoint.sh
+CMD ["/usr/bin/app/entrypoint.sh"]
