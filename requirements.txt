@@ -1,0 +1,7 @@
+annotated-types==0.7.0
+jinja2==3.1.4
+MarkupSafe==2.1.5
+pydantic==2.8.2
+pydantic-core==2.20.1
+supervisor==4.2.2
+typing-extensions==4.12.2

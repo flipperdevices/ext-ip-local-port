@@ -1,0 +1,33 @@
+user nginx;
+worker_processes auto;
+error_log /dev/stderr error;
+events {
+    worker_connections  1024;
+}
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+    underscores_in_headers on;
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+    access_log /dev/stdout main;
+    sendfile on;
+    keepalive_timeout 65;
+    {% for user in users %}
+    server {
+        listen 80;
+        server_name {{ user.hostname }}.{{ hostname_base }};
+        location / {
+            return 204;
+        }
+    }
+    server {
+        listen 80 default_server;
+        server_name _;
+        location / {
+            return 444;
+        }
+    }
+    {% endfor %}
+}
