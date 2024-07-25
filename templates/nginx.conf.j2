@@ -20,7 +20,9 @@ http {
         listen 80;
         server_name {{ user.hostname }}.{{ hostname_base }};
         location / {
-            return 204;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_pass http://{{ user.ip }}:8080;
         }
     }
     {% endfor %}
